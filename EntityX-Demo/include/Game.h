@@ -14,6 +14,7 @@
 #include "systems/PlayerControlSystem.h"
 #include "components\PlayerControl.h"
 #include "KeyHandler.h"
+#include "HudSystem.h"
 
 /// <summary>
 /// @Author Ross Palmer
@@ -54,6 +55,8 @@ private:
 	GameManager m_gameManager;
 
 	KeyHandler m_keyHandler;   // N.B. be sure to #include "KeyHandler.h"
+
+	Hudsystem m_hudSystem;
 	
 };
 

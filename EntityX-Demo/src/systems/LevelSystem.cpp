@@ -49,5 +49,11 @@ void LevelSystem::receive(const EvInit& e)
 	   WallCreator(obstacle.m_type, obstacle.m_position, obstacle.m_rotation).create(m_entityManager.create());
    }
 
+   //create the path
+   for (PathData const &path : e.m_level.m_pathData)
+   {
+	   PathCreator(path.m_type, path.m_position).create(m_entityManager.create());
+   }
+
 }
 

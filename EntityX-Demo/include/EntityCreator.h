@@ -18,6 +18,7 @@
 #include "components/AI.h"
 //#include "components/TankAI.h"
 #include "Ai/TankAi.h"
+#include "Path.h"
 
 class BackgroundCreator : public ICreatable
 {
@@ -76,4 +77,19 @@ private:
 	std::string m_type;
 	sf::Vector2f m_position;
 	double m_rotation;
+};
+
+class PathCreator : public ICreatable
+{
+public:
+
+	PathCreator(std::string type,
+		sf::Vector2f position);
+
+	void create(entityx::Entity& entity);
+
+private:
+	std::string m_type;
+	sf::Vector2f m_position;
+	
 };

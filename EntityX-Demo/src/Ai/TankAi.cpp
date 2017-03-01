@@ -1,16 +1,20 @@
 #include "ai/TankAi.h"
+#include "Path.h"
 
 
-TankAi::TankAi(std::vector<sf::CircleShape> const & obstacles, entityx::Entity::Id id)
-  : m_aiBehaviour(AiBehaviour::SEEK_PLAYER)
+TankAi::TankAi(std::vector<sf::CircleShape> const & obstacles, entityx::Entity::Id id, std::vector<sf::CircleShape> const & path)
+  : m_aiBehaviour(AiBehaviour::PATH_FOLLOWING)
   , m_steering(0,0)
   , m_obstacles(obstacles)
+  ,m_PathNode(path)
 {
+
 }
 
 void TankAi::update(entityx::Entity::Id playerId,
 	entityx::Entity::Id aiId,
 	entityx::EntityManager& entities,
+	entityx::EventManager& event,
 	double dt)
 {
 	entityx::Entity aiTank = entities.get(aiId);
@@ -20,6 +24,11 @@ void TankAi::update(entityx::Entity::Id playerId,
 	sf::Vector2f vectorToPlayer = seek(playerId,
 		aiId,
 		entities);
+
+	sf::Vector2f vectorToPath = pathFinder(aiId,
+		event,
+		entities);
+
 	switch (m_aiBehaviour)
 	{
 	case AiBehaviour::SEEK_PLAYER:
@@ -32,6 +41,15 @@ void TankAi::update(entityx::Entity::Id playerId,
 		break;
 	case AiBehaviour::STOP:
 		motion->m_speed = 0;
+		break;
+
+	case AiBehaviour::PATH_FOLLOWING:
+		m_steering += thor::unitVector(vectorToPath);
+		m_steering += collisionAvoidance(aiId, entities);
+		m_steering = Math::truncate(m_steering, MAX_FORCE);
+		m_velocity = Math::truncate(m_velocity + m_steering, MAX_SPEED);
+
+		break;
 	default:
 		break;
 	}
@@ -61,16 +79,38 @@ void TankAi::update(entityx::Entity::Id playerId,
 		position->m_rotation -= 1;
 	}
 
-	
-	if (thor::length(vectorToPlayer) < MAX_SEE_AHEAD)
+	switch (m_aiBehaviour)
 	{
-		m_aiBehaviour = AiBehaviour::STOP;
-	}	
-	else
-	{
-		motion->m_speed = thor::length(m_velocity);	
-		m_aiBehaviour = AiBehaviour::SEEK_PLAYER;
+	case AiBehaviour::SEEK_PLAYER:
+		if (thor::length(vectorToPlayer) < MAX_SEE_AHEAD)
+		{
+			m_aiBehaviour = AiBehaviour::STOP;
+		}
+		else
+		{
+			motion->m_speed = thor::length(m_velocity);
+			m_aiBehaviour = AiBehaviour::SEEK_PLAYER;
+		}
+		break;
+
+	case AiBehaviour::PATH_FOLLOWING:
+		if (thor::length(vectorToPath) < MAX_SEE_AHEAD)
+		{
+			m_aiBehaviour = AiBehaviour::STOP;
+		}
+		else
+		{
+			motion->m_speed = thor::length(m_velocity);
+			m_aiBehaviour = AiBehaviour::PATH_FOLLOWING;
+		}
+		break;
 	}
+	
+}
+
+int TankAi::getCurrentPathNode()
+{
+	return m_currentpathNode;
 }
 
 sf::Vector2f TankAi::seek(entityx::Entity::Id playerId,
@@ -85,12 +125,21 @@ sf::Vector2f TankAi::seek(entityx::Entity::Id playerId,
 	entityx::Entity player = entities.get(playerId);
 	Position::Handle playerPos = player.component<Position>();
 
+
+	entityx::Entity path = entities.get(playerId);
+	Position::Handle pathPos = path.component<Position>();
+
+
+
+
 	sf::Vector2f playerPosition = playerPos->m_position;
 	sf::Vector2f aiPosition = posAi->m_position;
 
 	sf::Vector2f vectorToplayer = playerPos->m_position - posAi->m_position;
+
+	//sf::Vector2f vectorToPath = pathPos->m_position - posAi->m_position;
 	
-	//aiPosition = vectorToplayer;
+	aiPosition = vectorToplayer;
 
 	return vectorToplayer;
 	
@@ -124,7 +173,24 @@ sf::Vector2f TankAi::collisionAvoidance(entityx::Entity::Id aiId,
     return avoidance;
 }
 
-//find theline from the ai to the player and see if it intersects 
+
+
+//private function findMostThreateningObstacle() :Obstacle{
+//	var mostThreatening : Obstacle = null;
+//
+//for (var i : int = 0; i < Game.instance.obstacles.length; i++) {
+//	var obstacle : Obstacle = Game.instance.obstacles[i];
+//	var collision : Boolean = lineIntersecsCircle(ahead, ahead2, obstacle);
+//
+//	// "position" is the character's current position
+//	if (collision && (mostThreatening == null || distance(position, obstacle) < distance(position, mostThreatening))) {
+//		mostThreatening = obstacle;
+//	}
+//}
+//return mostThreatening;
+//}
+
+//find the line from the ai to the player and see if it intersects 
 const sf::CircleShape TankAi::findMostThreateningObstacle(entityx::Entity::Id aiId,
 																     entityx::EntityManager& entities) 
 {		
@@ -138,7 +204,8 @@ const sf::CircleShape TankAi::findMostThreateningObstacle(entityx::Entity::Id ai
 	for (int i = 0; i < size; i++)
 	{
 		if(Math::lineIntersectsCircle(m_ahead, m_halfAhead, m_obstacles[i]) &&
-			Math::distance(posAi->m_position, m_obstacles.at(i).getPosition()) < Math::distance(posAi->m_position, mostThreatening.getPosition()))
+			( mostThreatening.getRadius() == 0 || 
+			Math::distance(posAi->m_position, m_obstacles.at(i).getPosition()) < Math::distance(posAi->m_position, mostThreatening.getPosition())))
 		{
 			mostThreatening = m_obstacles[i];
 		}
@@ -148,4 +215,34 @@ const sf::CircleShape TankAi::findMostThreateningObstacle(entityx::Entity::Id ai
 
 	return mostThreatening;
 }
+
+sf::Vector2f TankAi::pathFinder(entityx::Entity::Id aiId, entityx::EventManager& events, entityx::EntityManager& entities)
+{
+	entityx::Entity tankAi = entities.get(aiId);
+	Position::Handle aiPos = tankAi.component<Position>();
+
+	sf::Vector2f VectorToNode;
+	int size = m_PathNode.size();
+
+	if (Math::distance(aiPos->m_position, m_PathNode.at(pathNode).getPosition()) < m_PathNode.at(pathNode).getRadius() + 25)
+	{
+		VectorToNode = m_PathNode.at(pathNode).getPosition() - aiPos->m_position;
+		pathNode++;
+		if (pathNode == size)
+		{
+			pathNode = 0;
+		}
+	}
+	else
+	{
+		VectorToNode = m_PathNode.at(pathNode).getPosition() - aiPos->m_position;
+
+	}
+
+	
+	return VectorToNode;
+}
+
+
+
 

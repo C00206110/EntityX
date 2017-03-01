@@ -1,3 +1,8 @@
+/// kieran clothier c00206110	
+/// tank ai project to , creat a track for  a tank to move around with a hud.
+/// time approx 8.5 hours
+/// 
+///
 #include <iostream>
 #include <cstdlib>
 
@@ -115,6 +120,8 @@ void Game::processInput()
 void Game::update()
 {
 	GameState state(m_gameManager.getGameState());
+
+	m_hudSystem.update();
 
 	if (state == GameState::Playing)
 	{		

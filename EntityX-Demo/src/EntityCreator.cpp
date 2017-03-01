@@ -96,3 +96,28 @@ void WallCreator::create(entityx::Entity& entity)
 	entity.assign<Position>(m_position, m_rotation);
 	entity.assign<Wall>();
 }
+
+/// <summary>
+/// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// </summary> for the mover
+
+PathCreator::PathCreator(std::string type,
+	sf::Vector2f position
+	)
+
+	: m_type(type)
+	, m_position(position)
+
+{
+}
+
+void PathCreator::create(entityx::Entity& entity)
+{
+	auto volume = Volume();
+	volume.m_box = CollisionBox(33, 23);
+
+	entity.assign<Volume>(volume);
+	entity.assign<Display>(sf::IntRect(2, 129, 33, 23));
+	entity.assign<Position>(m_position);
+	entity.assign<Path>();
+}

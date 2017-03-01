@@ -6,6 +6,8 @@
 #include "utils/LevelLoader.h"
 #include "EntityCreator.h"
 #include "ScreenSize.h"
+#include "Path.h"
+
 
 /// <summary>
 /// @Author Ross Palmer

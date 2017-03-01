@@ -123,6 +123,12 @@
     <ClInclude Include="include\AI\TankAi.h">
       <Filter>Header Files\Ai</Filter>
     </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>Header Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="HudSystem.h">
+      <Filter>Header Files\systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EntityCreator.cpp">
@@ -206,5 +212,16 @@
     <ClCompile Include="src\Ai\TankAi.cpp">
       <Filter>Source Files\Ai</Filter>
     </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
+    <ClCompile Include="HudSystem.cpp">
+      <Filter>Source Files\systems</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="resources\fonts\akashi.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
   </ItemGroup>
 </Project>

@@ -84,3 +84,44 @@ obstacles:
    - type: wall
      position: {x: 1032, y: 632}
      rotation: 0
+Paths:
+   - type: Path
+     position: {x: 850, y: 275}
+   - type: Path
+     position: {x: 150, y: 835}
+   - type: Path
+     position: {x: 200, y: 292}
+   - type: Path
+     position: {x: 250, y: 659}
+   - type: Path
+     position: {x: 300, y: 712}
+   - type: Path
+     position: {x: 350, y: 420}
+   - type: Path
+     position: {x: 298, y: 550}
+   - type: Path
+     position: {x: 150, y: 300}
+   - type: Path
+     position: {x: 123, y: 900}
+   - type: Path
+     position: {x: 345, y: 300}
+   - type: Path
+     position: {x: 687, y: 300}
+   - type: Path
+     position: {x: 95, y: 669}
+   - type: Path
+     position: {x: 100, y: 10}
+   - type: Path
+     position: {x: 150, y: 65}
+   - type: Path
+     position: {x: 200, y: 20}
+   - type: Path
+     position: {x: 250, y: 200}
+   - type: Path
+     position: {x: 300, y: 160}
+   - type: Path
+     position: {x: 350, y: 389}
+   - type: Path
+     position: {x: 450, y: 87}
+   - type: Path
+     position: {x: 850, y: 888}

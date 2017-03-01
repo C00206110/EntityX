@@ -8,6 +8,13 @@ void operator >> (const YAML::Node& obstacleNode, ObstacleData& obstacle)
    obstacle.m_rotation = obstacleNode["rotation"].as<double>();
 }
 
+void operator >> (const YAML::Node& pathNode, PathData& path)
+{
+	path.m_type = pathNode["type"].as<std::string>();
+	path.m_position.x = pathNode["position"]["x"].as<float>();
+	path.m_position.y = pathNode["position"]["y"].as<float>();
+}
+
 void operator >> (const YAML::Node& backgroundNode, BackgroundData& background)
 {
    background.m_fileName = backgroundNode["file"].as<std::string>();
@@ -18,7 +25,7 @@ void operator >> (const YAML::Node& tankNode, TankData& tank)
 	tank.m_position.x = tankNode["position"]["x"].as<float>();
 	tank.m_position.y = tankNode["position"]["y"].as<float>();
 	tank.m_maxProjectiles = tankNode["max_projectiles"].as<int>();
-	tank.m_reloadTime = tankNode["reload_time"].as<int>();	
+	tank.m_reloadTime = tankNode["reload_time"].as<int>();
 }
 
 void operator >> (const YAML::Node& projectileNode, ProjectileData& projectile)
@@ -43,6 +50,14 @@ void operator >> (const YAML::Node& levelNode, LevelData& level)
 	  ObstacleData obstacle;
 	  obstaclesNode[i] >> obstacle;
 	  level.m_obstacles.push_back(obstacle);
+   }
+
+   const YAML::Node& PathNode = levelNode["Paths"].as<YAML::Node>();
+   for (unsigned i = 0; i < PathNode.size(); ++i)
+   {
+	   PathData path;
+	   PathNode[i] >> path;
+	   level.m_pathData.push_back(path);
    }
 }
 

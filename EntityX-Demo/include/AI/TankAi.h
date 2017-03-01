@@ -10,24 +10,28 @@
 #include <Thor/Vectors.hpp>
 #include <iostream>
 #include <queue>
+//#include "Path.h"
 
 class TankAi 
 {
 public:
 
-   TankAi(std::vector<sf::CircleShape> const & obstacles, entityx::Entity::Id id);
+   TankAi(std::vector<sf::CircleShape> const & obstacles, entityx::Entity::Id id, std::vector<sf::CircleShape> const & path);
 
 
-   void update(entityx::Entity::Id playerId,  
-	           entityx::Entity::Id aiId,
-               entityx::EntityManager& entities,
-               double dt);
+   void update(entityx::Entity::Id playerId,
+	   entityx::Entity::Id aiId,
+	   entityx::EntityManager& entities,
+	   entityx::EventManager& event,
+	   double dt);
  
    enum class AiType
    {
 	   AI_ID_NONE, 
 	   AI_ID_SEEK_SHOOT_AT_PLAYER
    };
+
+   int getCurrentPathNode();
 
 private:
 	sf::Vector2f seek(entityx::Entity::Id playerId,
@@ -36,6 +40,8 @@ private:
 
 	sf::Vector2f collisionAvoidance(entityx::Entity::Id aiId, 
 						            entityx::EntityManager& entities);
+
+	sf::Vector2f pathFinder(entityx::Entity::Id aiId, entityx::EventManager& events, entityx::EntityManager& entities);
 
 	const sf::CircleShape findMostThreateningObstacle(entityx::Entity::Id aiId,
 													  entityx::EntityManager& entities) ;
@@ -56,14 +62,20 @@ private:
 
 	float MAX_SPEED = 50.0f;
 
+	//for start node
+	int pathNode = 0;
+
+	int m_currentpathNode = 0;
 
 	std::vector<sf::CircleShape> const & m_obstacles;
+	std::vector<sf::CircleShape> const & m_PathNode;
 
 	enum class AiBehaviour
 	{
 		SEEK_PLAYER,
 		STOP,
-		RETREAT
+		RETREAT,
+		PATH_FOLLOWING
 	} m_aiBehaviour;
   
 

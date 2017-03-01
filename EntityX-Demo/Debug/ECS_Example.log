@@ -1,16 +1,20 @@
-﻿  TankAi.cpp
-g:\programming\entityx-demo\src\ai\tankai.cpp(106): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  ECS_Example.vcxproj -> G:\Programming\EntityX-Demo\Debug\ECS_Example.exe
-  ECS_Example.vcxproj -> G:\Programming\EntityX-Demo\Debug\ECS_Example.pdb (Partial PDB)
-  G:\Programming\EntityX-Demo\dlls\sfml-audio-2.dll
-  G:\Programming\EntityX-Demo\dlls\sfml-audio-d-2.dll
-  G:\Programming\EntityX-Demo\dlls\sfml-graphics-2.dll
-  G:\Programming\EntityX-Demo\dlls\sfml-graphics-d-2.dll
-  G:\Programming\EntityX-Demo\dlls\sfml-network-2.dll
-  G:\Programming\EntityX-Demo\dlls\sfml-network-d-2.dll
-  G:\Programming\EntityX-Demo\dlls\sfml-system-2.dll
-  G:\Programming\EntityX-Demo\dlls\sfml-system-d-2.dll
-  G:\Programming\EntityX-Demo\dlls\sfml-window-2.dll
-  G:\Programming\EntityX-Demo\dlls\sfml-window-d-2.dll
-  G:\Programming\EntityX-Demo\dlls\thor-d.dll
+﻿  Game.cpp
+f:\kierans stuff\kierans stuff\entityx-demo\src\game.cpp(14): warning C4244: 'initializing': conversion from 'double' to 'sf::Int32', possible loss of data
+  Generating Code...
+  Compiling...
+  main.cpp
+  Generating Code...
+  ECS_Example.vcxproj -> F:\kierans stuff\Kierans stuff\EntityX-Demo\Debug\ECS_Example.exe
+  ECS_Example.vcxproj -> F:\kierans stuff\Kierans stuff\EntityX-Demo\Debug\ECS_Example.pdb (Partial PDB)
+  F:\kierans stuff\Kierans stuff\EntityX-Demo\dlls\sfml-audio-2.dll
+  F:\kierans stuff\Kierans stuff\EntityX-Demo\dlls\sfml-audio-d-2.dll
+  F:\kierans stuff\Kierans stuff\EntityX-Demo\dlls\sfml-graphics-2.dll
+  F:\kierans stuff\Kierans stuff\EntityX-Demo\dlls\sfml-graphics-d-2.dll
+  F:\kierans stuff\Kierans stuff\EntityX-Demo\dlls\sfml-network-2.dll
+  F:\kierans stuff\Kierans stuff\EntityX-Demo\dlls\sfml-network-d-2.dll
+  F:\kierans stuff\Kierans stuff\EntityX-Demo\dlls\sfml-system-2.dll
+  F:\kierans stuff\Kierans stuff\EntityX-Demo\dlls\sfml-system-d-2.dll
+  F:\kierans stuff\Kierans stuff\EntityX-Demo\dlls\sfml-window-2.dll
+  F:\kierans stuff\Kierans stuff\EntityX-Demo\dlls\sfml-window-d-2.dll
+  F:\kierans stuff\Kierans stuff\EntityX-Demo\dlls\thor-d.dll
          11 file(s) copied.
